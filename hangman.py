@@ -1,6 +1,6 @@
 import random
 import string
-from mots import mots
+from mots import mots_courts, mots_moyens, mots_longs
 
 score = 0
 nom_joueur = ""
@@ -40,7 +40,26 @@ def hangman():
         nom_joueur = recuperer_nom_joueur()
 
     global score
-    mot_original = choisir_mot(mots)
+
+    # Options : Choix du niveau de difficulté ---
+    print("\nChoisissez un niveau de difficulté :")
+    print("1 - Facile (mots courts)")
+    print("2 - Moyen (mots moyens)")
+    print("3 - Difficile (mots longs)")
+
+    choix = input("Entrez votre choix (1, 2 ou 3) : ")
+    while choix not in {"1", "2", "3"}:
+        choix = input("Choix invalide. Merci d'entrer 1, 2 ou 3 : ")
+
+    if choix == "1":
+        liste_mots = mots_courts
+    elif choix == "2":
+        liste_mots = mots_moyens
+    else:
+        liste_mots = mots_longs
+
+    # Sélection du mot dans la liste correspondant à la difficulté choisie
+    mot_original = choisir_mot(liste_mots)
     mot = mot_original.upper()
 
     # Ensembles (sets) pour suivre les lettres restant à deviner et proposées
