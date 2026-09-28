@@ -2,6 +2,8 @@ import random
 import string
 from mots import mots
 
+# Initialisation du score global à zéro
+score = 0
 
 # Fonction qui choisit un mot au hasard dans la liste fournie
 def choisir_mot(mots):
@@ -28,6 +30,9 @@ def jouer_de_nouveau():
 
 # Fonction principale contenant toute la logique du jeu du pendu
 def hangman():
+
+    # Déclaration pour pouvoir modifier la variable globale 'score' définie hors de la fonction
+    global score
     # Sélection du mot secret et conversion du mot en majuscules
     mot_original = choisir_mot(mots)
     mot = mot_original.upper()
@@ -76,6 +81,10 @@ def hangman():
         jouer_de_nouveau() # Appelle la fonction pour proposer de relancer une partie
     else:
         print("Le mot à deviner est", mot, "vous avez gagné!")
+        
+        # Ajout de 10 points au score global en cas de victoire
+        score += 10
+        print("Votre score est:", score) # Affichage du nouveau score cumulé
         jouer_de_nouveau() # Appelle la fonction pour proposer de relancer une partie
 
 hangman()
