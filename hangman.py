@@ -8,9 +8,26 @@ def choisir_mot(mots):
     mot = random.choice(mots)  # Sélectionne aléatoirement un mot
     return mot
 
+# Fonction qui demande au joueur s'il souhaite rejouer ou quitter la partie
+def jouer_de_nouveau():
+    # Demande initiale de saisie au joueur
+    jouer_jeu = input("Souhaitez-vous continuer à jouer? (O = Oui, N = Non)")
+
+    # Boucle de contrôle : continue de demander tant que la réponse n'est pas valide (O, o, N ou n)
+    while jouer_jeu not in {"O", "o", "N","n"}:
+        jouer_jeu = input("Souhaitez-vous continuer à jouer? (O = Oui, N = Non)")
+
+    # Si le joueur répond Oui ("O" ou "o"), on relance une nouvelle partie
+    if jouer_jeu == "O" or jouer_jeu == "o":
+        hangman()
+
+    # Si le joueur répond Non ("N" ou "n"), on affiche un message et on ferme le programme
+    elif jouer_jeu == "N" or jouer_jeu == "n":
+        print("Merci d'avoir jouer et à bientôt !")
+        exit()  # Arrêter immédiatement l'exécution du script Python
 
 # Fonction principale contenant toute la logique du jeu du pendu
-def hangmant():
+def hangman():
     # Sélection du mot secret et conversion du mot en majuscules
     mot_original = choisir_mot(mots)
     mot = mot_original.upper()
@@ -56,7 +73,10 @@ def hangmant():
     # Fin de la partie : vérification de la raison de sortie de boucle
     if essai == 0:
         print("Vous avez perdu, il ne vous reste plus d'essai!")
+        jouer_de_nouveau() # Appelle la fonction pour proposer de relancer une partie
     else:
         print("Le mot à deviner est", mot, "vous avez gagné!")
-hangmant()
+        jouer_de_nouveau() # Appelle la fonction pour proposer de relancer une partie
+
+hangman()
 
