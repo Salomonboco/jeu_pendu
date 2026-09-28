@@ -4,6 +4,7 @@ from mots import mots
 
 # Initialisation du score global à zéro
 score = 0
+nom_joueur = ""
 
 # Fonction qui choisit un mot au hasard dans la liste fournie
 def choisir_mot(mots):
@@ -25,11 +26,25 @@ def jouer_de_nouveau():
 
     # Si le joueur répond Non ("N" ou "n"), on affiche un message et on ferme le programme
     elif jouer_jeu == "N" or jouer_jeu == "n":
-        print("Merci d'avoir jouer et à bientôt !")
+        print(f"Vous repartez avec un total de {score} points !\nMerci d'avoir joué et à bientôt !")
         exit()  # Arrêter immédiatement l'exécution du script Python
+
+def recuperer_nom_joueur():
+     nom_joueur = input("Merci de saisir votre nom:")
+     nom_joueur = nom_joueur.capitalize()
+     if not nom_joueur.isalpha() or len(nom_joueur) < 4:
+        print("Le nom que vous avez saisi est invalide")
+        return recuperer_nom_joueur()
+     else:
+        return nom_joueur
+
 
 # Fonction principale contenant toute la logique du jeu du pendu
 def hangman():
+
+    global nom_joueur
+    if nom_joueur == "":
+        nom_joueur = recuperer_nom_joueur()
 
     # Déclaration pour pouvoir modifier la variable globale 'score' définie hors de la fonction
     global score
@@ -69,7 +84,7 @@ def hangman():
 
         # Cas 2 : La lettre a déjà été proposée précédemment
         elif lettre_choisie in lettres_jouées:
-            print("Vous avez déjà utilisé cette lettre, choisissez une autre lettre!")
+            print(nom_joueur,"vous avez déjà utilisé cette lettre, choisissez une autre lettre!")
 
         # Cas 3 : La saisie est invalide (chiffre, symbole ou plusieurs caractères)
         else:
@@ -77,14 +92,14 @@ def hangman():
 
     # Fin de la partie : vérification de la raison de sortie de boucle
     if essai == 0:
-        print("Vous avez perdu, il ne vous reste plus d'essai!")
+        print(f"{nom_joueur} vous avez perdu avec un total de: {score} points.\nIl ne vous reste plus d'essai!")
         jouer_de_nouveau() # Appelle la fonction pour proposer de relancer une partie
     else:
-        print("Le mot à deviner est", mot, "vous avez gagné!")
-        
+        print(f"Le mot à deviner est {mot}. Félicitations {nom_joueur}, vous avez gagné 10 points!")
+
         # Ajout de 10 points au score global en cas de victoire
         score += 10
-        print("Votre score est:", score) # Affichage du nouveau score cumulé
+        print(nom_joueur, f"votre score est de: {score} points!") # Affichage du nouveau score cumulé
         jouer_de_nouveau() # Appelle la fonction pour proposer de relancer une partie
 
 hangman()
