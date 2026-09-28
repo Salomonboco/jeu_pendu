@@ -1,7 +1,62 @@
 import random
+import string
 from mots import mots
 
+
+# Fonction qui choisit un mot au hasard dans la liste fournie
 def choisir_mot(mots):
-    mot = random.choice(mots)
+    mot = random.choice(mots)  # Sélectionne aléatoirement un mot
     return mot
+
+
+# Fonction principale contenant toute la logique du jeu du pendu
+def hangmant():
+    # Sélection du mot secret et conversion du mot en majuscules
+    mot_original = choisir_mot(mots)
+    mot = mot_original.upper()
+
+    # Ensembles (sets) pour gérer les lettres uniques
+    mot_lettre = set(mot)  # Ensemble des lettres restants à deviner
+    alphabet = set(string.ascii_uppercase)  # Toutes les lettres de l'alphabet (A-Z)
+    lettres_jouées = set()  # Historique des lettres déjà proposées
+    essai = 6  # Nombre de vies ou tentatives de départ
+
+    # Boucle du jeu : continue tant qu'il reste des lettres à trouver et des essais disponibles
+    while len(mot_lettre) > 0 and essai > 0:
+        # Affichage de l'état actuel : essais restants et lettres déjà jouées
+        print("Vous avez", essai, "essai(s) et vous avez utilisé les lettres suivantes:", ','.join(lettres_jouées))
+
+        # Masque le mot : affiche la lettre si elle a été devinée, sinon un underscore "_"
+        mot_liste = [lettre if lettre in lettres_jouées else "_" for lettre in mot]
+        print("Le mot actuel est:", ' '.join(mot_liste))
+
+        # Saisie du joueur et conversion automatique en majuscule
+        lettre_choisie = input("Entrer une lettre !").upper()
+
+        # Cas 1 : La lettre saisie est valide (fait partie de l'alphabet) et n'a pas encore été jouée
+        if lettre_choisie in alphabet - lettres_jouées:
+            lettres_jouées.add(lettre_choisie)  # On ajoute la lettre aux lettres jouées
+
+            # Si la lettre fait partie du mot secret
+            if lettre_choisie in mot_lettre:
+                mot_lettre.remove(lettre_choisie)  # On la retire des lettres à deviner
+                essai = 6  # Réinitialise le nombre d'essais à 6 après chaque bonne lettre
+            else:
+                essai -= 1  # Mauvaise lettre : on perd 1 essai
+                print("Il vous reste", essai, "essai(s)")
+
+        # Cas 2 : La lettre a déjà été proposée précédemment
+        elif lettre_choisie in lettres_jouées:
+            print("Vous avez déjà utilisé cette lettre, choisissez une autre lettre!")
+
+        # Cas 3 : La saisie est invalide (chiffre, symbole ou plusieurs caractères)
+        else:
+            print("Votre choix est incorrecte, merci de choisir une lettre!")
+
+    # Fin de la partie : vérification de la raison de sortie de boucle
+    if essai == 0:
+        print("Vous avez perdu, il ne vous reste plus d'essai!")
+    else:
+        print("Le mot à deviner est", mot, "vous avez gagné!")
+hangmant()
 
